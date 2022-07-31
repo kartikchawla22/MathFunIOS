@@ -15,7 +15,7 @@ class GameModel {
     var randomOperator = ""
     var question = ""
     private var selectedMode = ""
-
+    
     func setSelectedMode(mode: String) {
         selectedMode = mode
     }
@@ -35,7 +35,7 @@ class GameModel {
         question = "\(firstNum) \(randomOperator) \(secondNum) = ?"
         return question
     }
-
+    
     func getResult() -> Int {
         switch randomOperator {
             case "+":
@@ -50,10 +50,6 @@ class GameModel {
                 return secondNum
         }
     }
-}
-
-enum Constants {
-    static let OPERATIONS = ["+", "-", "/", "*"]
 }
 
 enum Game_Modes {

@@ -8,19 +8,17 @@
 import UIKit
 
 class HighScoreTableViewCell: UITableViewCell {
-
+    
     @IBOutlet weak var timeStamp: UILabel!
     @IBOutlet weak var score: UILabel!
+    @IBOutlet weak var indexLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
-
+    
 }

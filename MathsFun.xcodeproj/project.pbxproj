@@ -17,6 +17,7 @@
 		051033632888435A00680A85 /* GameBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051033622888435A00680A85 /* GameBoardViewController.swift */; };
 		055DD5DA2891E7B100FBB8F6 /* HighScoreTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055DD5D92891E7B100FBB8F6 /* HighScoreTableViewController.swift */; };
 		055DD5DC2891E7EF00FBB8F6 /* HighScoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055DD5DB2891E7EF00FBB8F6 /* HighScoreTableViewCell.swift */; };
+		05810B2428962A6C00525F26 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05810B2328962A6C00525F26 /* DataModel.swift */; };
 		05CFB05D2888728100F9D30B /* RandomQuestionsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CFB05C2888728100F9D30B /* RandomQuestionsModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +34,7 @@
 		051033622888435A00680A85 /* GameBoardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBoardViewController.swift; sourceTree = "<group>"; };
 		055DD5D92891E7B100FBB8F6 /* HighScoreTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighScoreTableViewController.swift; sourceTree = "<group>"; };
 		055DD5DB2891E7EF00FBB8F6 /* HighScoreTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighScoreTableViewCell.swift; sourceTree = "<group>"; };
+		05810B2328962A6C00525F26 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		05CFB05C2888728100F9D30B /* RandomQuestionsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomQuestionsModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -86,6 +88,7 @@
 			children = (
 				051033602888393B00680A85 /* GameModel.swift */,
 				05CFB05C2888728100F9D30B /* RandomQuestionsModel.swift */,
+				05810B2328962A6C00525F26 /* DataModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -169,6 +172,7 @@
 				051033632888435A00680A85 /* GameBoardViewController.swift in Sources */,
 				055DD5DC2891E7EF00FBB8F6 /* HighScoreTableViewCell.swift in Sources */,
 				0510334E288838B500680A85 /* SceneDelegate.swift in Sources */,
+				05810B2428962A6C00525F26 /* DataModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

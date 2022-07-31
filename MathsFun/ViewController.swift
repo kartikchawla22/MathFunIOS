@@ -8,7 +8,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     //MARK: Class variables
     
     let gameModel = GameModel.shared;
@@ -18,7 +18,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
     
     func setGameMode(mode: String, segue: String) {
@@ -32,9 +31,9 @@ class ViewController: UIViewController {
             let highScoreList = storyBoard.instantiateViewController(withIdentifier: "HighScoreList") as! HighScoreTableViewController
             self.present(highScoreList, animated:true, completion:nil)
         }
-    
+        
     }
-
+    
     //MARK: - IBActions
     
     

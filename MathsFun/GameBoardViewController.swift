@@ -11,9 +11,12 @@ class GameBoardViewController: UIViewController {
     // MARK: - Class Variables
     
     var timer = Timer()
-    var counter = 70
+    var counter = 10
     let gameModel = GameModel.shared
     let randomQuestionsModel = RandomQuestionsModel()
+    let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+    let dataModel = DataModel()
+    var totalScore = -1;
     
     // MARK: - IBOutlets
     
@@ -29,11 +32,13 @@ class GameBoardViewController: UIViewController {
         super.viewDidLoad()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in self.timerAction() }
         showNewQuestion()
+        gameMode.text = gameModel.getSelectedMode() + "-Game"
     }
     
     // MARK: - Class Functions
     
     func showNewQuestion() {
+        totalScore+=1
         let newQuestion = gameModel.generateRandomQuestion()
         question.text = newQuestion
         setRandomOptions()
@@ -54,7 +59,7 @@ class GameBoardViewController: UIViewController {
             (optionsStackView.viewWithTag(i + 1) as! UIButton).setTitle(String(randomOptions[i]), for: .normal)
         }
     }
-
+    
     func timerAction() {
         let minutes = Int(counter / 60)
         let seconds = counter % 60
@@ -65,7 +70,10 @@ class GameBoardViewController: UIViewController {
             timerLabel.text = "\(minutes) : \(seconds) "
         }
         if counter == 0 {
+            timerLabel.text = "0 : 00 "
             timer.invalidate()
+            endGame()
+            showFinishGameAlert(message: "Congratulations")
         }
     }
     
@@ -76,19 +84,27 @@ class GameBoardViewController: UIViewController {
         if sender.currentTitle == String(gameModel.getResult()) {
             showNewQuestion()
         } else {
-            print("Wrong")
+            endGame()
+            timer.invalidate()
+            showFinishGameAlert(message: "OOPS, Wrong Answer!")
         }
     }
     
-   
-
-    /*
-     // MARK: - Navigation
-
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-         // Get the new view controller using segue.destination.
-         // Pass the selected object to the new view controller.
-     }
-     */
+    func showFinishGameAlert(message: String) {
+        let alert = UIAlertController(title: "Game Finished", message: message, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { (UIAlertAction) in
+            self.goToScoreList()
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    func goToScoreList(){
+        let highScoreList = storyBoard.instantiateViewController(withIdentifier: "HighScoreList")
+        self.present(highScoreList, animated:true, completion:nil)
+    }
+    func endGame(){
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd"
+        let dateStr = formatter.string(from: Date())
+        dataModel.saveGame(score: totalScore, dateTime: dateStr, mode: gameModel.getSelectedMode())
+    }
 }
