@@ -8,16 +8,9 @@
 import Foundation
 class DataModel {
     func saveGame(score: Int, dateTime: String, mode: String) {
-        print("score")
-        print(score)
-        print("mode")
-        print(mode)
         let numOfGamesPlayed = UserDefaults.standard.integer(forKey: Constants.NUM_GAMES + mode)
         let currentGame = numOfGamesPlayed + 1;
-        print(Constants.SCORE  + mode + String(currentGame))
         UserDefaults.standard.set(score, forKey: Constants.SCORE  + mode + String(currentGame))
-        print(Constants.DATE_TIME  + mode + String(currentGame))
-        print(dateTime)
         UserDefaults.standard.set(dateTime, forKey: Constants.DATE_TIME  + mode + String(currentGame))
         UserDefaults.standard.set(currentGame, forKey: Constants.NUM_GAMES + mode)
     }
@@ -25,6 +18,12 @@ class DataModel {
         UserDefaults.standard.set(mode, forKey: Constants.CURRENT_GAME_MODE)
         UserDefaults.standard.set(score, forKey: Constants.CURRENT_GAME_SCORE)
         UserDefaults.standard.set(time, forKey: Constants.CURRENT_GAME_TIMER )
+    }
+    func isGameSaved() -> Bool {
+        let score = UserDefaults.standard.integer(forKey: Constants.CURRENT_GAME_SCORE)
+        let time = UserDefaults.standard.integer(forKey: Constants.CURRENT_GAME_TIMER)
+        let mode = UserDefaults.standard.string(forKey: Constants.CURRENT_GAME_MODE)
+        return score > -1 && time > 0 && mode != ""
     }
     
 }

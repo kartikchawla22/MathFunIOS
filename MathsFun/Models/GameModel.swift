@@ -15,6 +15,7 @@ class GameModel {
     var randomOperator = ""
     var question = ""
     private var selectedMode = ""
+    private var upperLimit = 11
     
     func setSelectedMode(mode: String) {
         selectedMode = mode
@@ -24,13 +25,23 @@ class GameModel {
     }
     func generateRandomQuestion() -> String {
         randomOperator = Constants.OPERATIONS[Int.random(in: 0..<4)]
-        firstNum = Int.random(in: 0..<11)
-        secondNum = Int.random(in: 1..<11)
+        if(selectedMode == Game_Modes.HARD) {
+            upperLimit = 100
+        } else {
+            upperLimit = 11
+        }
+        firstNum = Int.random(in: 0..<upperLimit)
+        secondNum = Int.random(in: 1..<upperLimit)
         if (firstNum == secondNum) {
-            secondNum = Int.random(in: 0..<11)
+            secondNum = Int.random(in: 0..<upperLimit)
         }
         if (randomOperator == "/") {
-            firstNum = Int.random(in: 1..<5) * secondNum
+            if(selectedMode == Game_Modes.HARD) {
+                firstNum = Int.random(in: 1..<21) * secondNum
+            } else {
+                firstNum = Int.random(in: 1..<5) * secondNum
+            }
+            
         }
         question = "\(firstNum) \(randomOperator) \(secondNum) = ?"
         return question
@@ -49,6 +60,13 @@ class GameModel {
             default:
                 return secondNum
         }
+    }
+    func reset() {
+        firstNum = 0
+        secondNum = 0
+         randomOperator = ""
+         question = ""
+        setSelectedMode(mode: "")
     }
 }
 

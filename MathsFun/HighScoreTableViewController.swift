@@ -17,6 +17,7 @@ class HighScoreTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         loadData()
         tableView.reloadData()
+        title = gameModel.getSelectedMode() + " Game"
     }
     
     // MARK: - Table view data source

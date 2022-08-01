@@ -30,11 +30,22 @@ class GameBoardViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in self.timerAction() }
-        showNewQuestion()
-        gameMode.text = gameModel.getSelectedMode() + "-Game"
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if (dataModel.isGameSaved()) {
+            totalScore = UserDefaults.standard.integer(forKey: Constants.CURRENT_GAME_SCORE)
+            counter = UserDefaults.standard.integer(forKey: Constants.CURRENT_GAME_TIMER)
+            gameModel.setSelectedMode(mode: UserDefaults.standard.string(forKey: Constants.CURRENT_GAME_MODE)!)
+        }
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in self.timerAction() }
+        if(timer.isValid) {
+            showNewQuestion()
+            gameMode.text = gameModel.getSelectedMode() + "-Game"
+        }
+        
+    }
     // MARK: - Class Functions
     
     func showNewQuestion() {
@@ -75,6 +86,7 @@ class GameBoardViewController: UIViewController {
             endGame()
             showFinishGameAlert(message: "Congratulations")
         }
+        dataModel.saveCurrentGame(score: totalScore, time: counter, mode: gameModel.getSelectedMode())
     }
     
     
@@ -98,8 +110,10 @@ class GameBoardViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     func goToScoreList(){
-        let highScoreList = storyBoard.instantiateViewController(withIdentifier: "HighScoreList")
-        self.present(highScoreList, animated:true, completion:nil)
+        self.navigationController?.popViewController(animated: true)
+        let highScoreList = storyBoard.instantiateViewController(withIdentifier: "HighScoreList") as! HighScoreTableViewController
+        navigationController?.pushViewController(highScoreList, animated: true)
+        
     }
     func endGame(){
         let formatter = DateFormatter()
