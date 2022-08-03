@@ -11,12 +11,13 @@ class GameBoardViewController: UIViewController {
     // MARK: - Class Variables
     
     var timer = Timer()
-    var counter = 10
+    var counter = 300
     let gameModel = GameModel.shared
     let randomQuestionsModel = RandomQuestionsModel()
     let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
     let dataModel = DataModel()
     var totalScore = -1;
+    
     
     // MARK: - IBOutlets
     
@@ -27,6 +28,9 @@ class GameBoardViewController: UIViewController {
     @IBOutlet var gameMode: UILabel!
     
     @IBOutlet var optionsStackView: UIStackView!
+    
+    
+    // MARK: - Class Overrides
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,12 +44,15 @@ class GameBoardViewController: UIViewController {
             gameModel.setSelectedMode(mode: UserDefaults.standard.string(forKey: Constants.CURRENT_GAME_MODE)!)
         }
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in self.timerAction() }
-        if(timer.isValid) {
-            showNewQuestion()
-            gameMode.text = gameModel.getSelectedMode() + "-Game"
-        }
-        
+        showNewQuestion()
+        gameMode.text = gameModel.getSelectedMode() + "-Game"
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        timer.invalidate()
+    }
+    
+    
     // MARK: - Class Functions
     
     func showNewQuestion() {
@@ -86,7 +93,30 @@ class GameBoardViewController: UIViewController {
             endGame()
             showFinishGameAlert(message: "Congratulations")
         }
+        print("inside timer")
         dataModel.saveCurrentGame(score: totalScore, time: counter, mode: gameModel.getSelectedMode())
+    }
+    
+    func showFinishGameAlert(message: String) {
+        let alert = UIAlertController(title: "Game Finished", message: message, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { (UIAlertAction) in
+            self.goToScoreList()
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func goToScoreList(){
+        let highScoreList = storyBoard.instantiateViewController(withIdentifier: "HighScoreList") as! HighScoreTableViewController
+        navigationController?.pushViewController(highScoreList, animated: true)
+    }
+    
+    func endGame(){
+        dataModel.deleteCurrentGameState()
+        timer.invalidate()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd"
+        let dateStr = formatter.string(from: Date())
+        dataModel.saveGame(score: totalScore, dateTime: dateStr, mode: gameModel.getSelectedMode())
     }
     
     
@@ -100,25 +130,5 @@ class GameBoardViewController: UIViewController {
             timer.invalidate()
             showFinishGameAlert(message: "OOPS, Wrong Answer!")
         }
-    }
-    
-    func showFinishGameAlert(message: String) {
-        let alert = UIAlertController(title: "Game Finished", message: message, preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { (UIAlertAction) in
-            self.goToScoreList()
-        }))
-        self.present(alert, animated: true, completion: nil)
-    }
-    func goToScoreList(){
-        self.navigationController?.popViewController(animated: true)
-        let highScoreList = storyBoard.instantiateViewController(withIdentifier: "HighScoreList") as! HighScoreTableViewController
-        navigationController?.pushViewController(highScoreList, animated: true)
-        
-    }
-    func endGame(){
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd"
-        let dateStr = formatter.string(from: Date())
-        dataModel.saveGame(score: totalScore, dateTime: dateStr, mode: gameModel.getSelectedMode())
     }
 }

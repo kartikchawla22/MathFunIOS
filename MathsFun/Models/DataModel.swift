@@ -25,6 +25,11 @@ class DataModel {
         let mode = UserDefaults.standard.string(forKey: Constants.CURRENT_GAME_MODE)
         return score > -1 && time > 0 && mode != ""
     }
+    func deleteCurrentGameState() {
+        UserDefaults.standard.removeObject(forKey: Constants.CURRENT_GAME_MODE)
+        UserDefaults.standard.removeObject(forKey: Constants.CURRENT_GAME_TIMER)
+        UserDefaults.standard.removeObject(forKey: Constants.CURRENT_GAME_SCORE)
+    }
     
 }
 struct Constants {
