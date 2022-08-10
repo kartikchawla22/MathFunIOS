@@ -7,35 +7,52 @@
 
 import UIKit
 
+/// This controller handles the game operations in easy and medium mode
 class GameBoardViewController: UIViewController {
     // MARK: - Class Variables
     
+    /// Timer after which game will end automatically.
     var timer = Timer()
+    
+    /// Counter in seconds => 300 seconds means 5 minutes
     var counter = 300
+    
+    /// Shared instance of GameModel class, which is a singleton Class.
     let gameModel = GameModel.shared
+    
+    /// Object of class RandomQuestionsModel
     let randomQuestionsModel = RandomQuestionsModel()
+    
+    /// Main Story board of the application
     let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+    
+    /// Object of class DataModel
     let dataModel = DataModel()
+    
+    ///The score of the player, -1 so that initial score can be calculated as 0.
     var totalScore = -1;
     
     
     // MARK: - IBOutlets
     
+    
+    /// Label in which new question will appear
     @IBOutlet var question: UILabel!
     
+    /// Label in which countdown timer will appear
     @IBOutlet var timerLabel: UILabel!
     
+    /// Label in which player selected game mode will appear
     @IBOutlet var gameMode: UILabel!
     
+    
+    /// View in which options appear for the player to choose the correct answer from.
     @IBOutlet var optionsStackView: UIStackView!
     
     
     // MARK: - Class Overrides
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
+    /// This function is called whenever this controller is in the view.
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if (dataModel.isGameSaved()) {
@@ -48,6 +65,9 @@ class GameBoardViewController: UIViewController {
         gameMode.text = gameModel.getSelectedMode() + "-Game"
     }
     
+    
+    /// This function is called when this controller disappears from the view
+    /// We invalidated the timer here.
     override func viewWillDisappear(_ animated: Bool) {
         timer.invalidate()
     }
@@ -55,6 +75,7 @@ class GameBoardViewController: UIViewController {
     
     // MARK: - Class Functions
     
+    /// This function is used to show the next question
     func showNewQuestion() {
         totalScore+=1
         let newQuestion = gameModel.generateRandomQuestion()
@@ -62,6 +83,7 @@ class GameBoardViewController: UIViewController {
         setRandomOptions()
     }
     
+    /// This private function sets the random options for the player to choose from.
     private func setRandomOptions() {
         var randomOptions: [Int] = randomQuestionsModel.generateRandomOptions()
         randomOptions.append(gameModel.getResult())
@@ -78,6 +100,7 @@ class GameBoardViewController: UIViewController {
         }
     }
     
+    /// This function is called for every next tick of the timer.
     func timerAction() {
         let minutes = Int(counter / 60)
         let seconds = counter % 60
@@ -93,10 +116,10 @@ class GameBoardViewController: UIViewController {
             endGame()
             showFinishGameAlert(message: "Congratulations")
         }
-        print("inside timer")
         dataModel.saveCurrentGame(score: totalScore, time: counter, mode: gameModel.getSelectedMode())
     }
     
+    /// Once the game is finished this function is used to show the message.
     func showFinishGameAlert(message: String) {
         let alert = UIAlertController(title: "Game Finished", message: message, preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { (UIAlertAction) in
@@ -105,11 +128,15 @@ class GameBoardViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+    
+    /// This function is used to go to the score list.
     func goToScoreList(){
         let highScoreList = storyBoard.instantiateViewController(withIdentifier: "HighScoreList") as! HighScoreTableViewController
         navigationController?.pushViewController(highScoreList, animated: true)
     }
     
+    
+    /// This function is called once the game ends
     func endGame(){
         dataModel.deleteCurrentGameState()
         timer.invalidate()
@@ -122,6 +149,7 @@ class GameBoardViewController: UIViewController {
     
     // MARK: - IBActions
     
+    /// This function is called whenever user chooses the answer.
     @IBAction func buttonAction(_ sender: UIButton!) {
         if sender.currentTitle == String(gameModel.getResult()) {
             showNewQuestion()

@@ -7,26 +7,32 @@
 
 import UIKit
 
+/// First controller of the application
 class ViewController: UIViewController {
     // MARK: - IBOutlets
     
+    /// Continue button shown on the UI
     @IBOutlet weak var continueButton: UIButton!
     
     
     //MARK: - Class variables
-    
+    /// shared instance of GameModel class, which is a singleton Class.
     let gameModel = GameModel.shared
+    /// Object of DataModel Class
     let dataModel = DataModel()
+    /// instance of the storyBoard
     var storyBoard : UIStoryboard!
     
     
     // MARK: - Class Overrides
     
+    // Used to initiliaze variables
     override func viewDidLoad() {
         super.viewDidLoad()
         storyBoard = UIStoryboard(name: "Main", bundle:nil)
     }
     
+    // Called everytime this controller is about to appear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         gameModel.reset()
@@ -42,6 +48,7 @@ class ViewController: UIViewController {
     
     // MARK: - Class Functions
     
+    /// This function sets the user selected game mode and starts the game accordingly.
     func setGameModeAndStartGame(mode: String, segue: String) {
         gameModel.setSelectedMode(mode: mode)
         if(segue == "GameBoard") {
@@ -53,6 +60,7 @@ class ViewController: UIViewController {
         }
     }
     
+    /// This function is used to go to the game board, depending upon what mode user selects.
     func goToGameBoard() {
         if(gameModel.getSelectedMode() == Game_Modes.HARD) {
             let hardGameBoardViewController = storyBoard.instantiateViewController(withIdentifier: "HardGameBoard") as! HardModeGameBoardViewController
@@ -64,6 +72,8 @@ class ViewController: UIViewController {
         }
     }
     
+    
+    /// This function is used to show the alert using which player can choose the game mode.
     func showAlert(segue: String) {
         let alert = UIAlertController(title: "Game Mode", message: "Please Choose Game Mode", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: Game_Modes.EASY, style: .default, handler: { (UIAlertAction) in
@@ -84,14 +94,17 @@ class ViewController: UIViewController {
     
     //MARK: - IBActions
     
+    /// Called when played clicks on new game button
     @IBAction func onNewGameTouch(_ sender: UIButton) {
         showAlert(segue: "GameBoard")
     }
     
+    /// Called when played clicks on show score button
     @IBAction func viewHighScore(_ sender: UIButton) {
         showAlert(segue: "HighScoreList")
     }
     
+    /// Called when player clicks on contunue game button
     @IBAction func onContinueGameTouch(_ sender: Any) {
         goToGameBoard()
     }

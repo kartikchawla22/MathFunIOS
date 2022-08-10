@@ -6,24 +6,38 @@
 //
 
 import Foundation
+
+/// This class is a singleton class.
+/// This Class is used to managed all the game functionalities like generating a random equation.
 class GameModel {
-    
+    /// Shared instance of class GameModel
     static let shared = GameModel()
-    
+    /// Random number as first operand
     var firstNum = 0
+    /// Random number as second operand
     var secondNum = 0
+    /// Random operator
     var randomOperator = ""
+    /// Generated question using random operands and operator
     var question = ""
+    /// User Selected Mode
     private var selectedMode = ""
+    /// Upper limit of the randomly generated numbers
     private var upperLimit = 11
+    /// Lower limit of the randomly generated numbers
     private var lowerLimit = 1
     
+    /// Sets the user selected mode in memory
     func setSelectedMode(mode: String) {
         selectedMode = mode
     }
+    /// Fetches the user selected mode
+    /// Returns the user selected mode as a String
     func getSelectedMode() -> String {
         return selectedMode
     }
+    /// Generates Random Questions
+    /// Returns the randomly generated question as a String
     func generateRandomQuestion() -> String {
         randomOperator = Constants.OPERATIONS[Int.random(in: 0..<4)]
         if(selectedMode == Game_Modes.HARD) {
@@ -55,6 +69,8 @@ class GameModel {
         return question
     }
     
+    
+    /// Returns the result of a randomly generated question as an integer.
     func getResult() -> Int {
         switch randomOperator {
             case "+":
@@ -69,15 +85,16 @@ class GameModel {
                 return secondNum
         }
     }
+    /// Resets the game model variables to initial values
     func reset() {
         firstNum = 0
         secondNum = 0
-         randomOperator = ""
-         question = ""
+        randomOperator = ""
+        question = ""
         setSelectedMode(mode: "")
     }
 }
-
+/// Enum to get games modes so that we can avoid string mismatch errors.
 enum Game_Modes {
     static let EASY = "Easy"
     static let MEDIUM = "Medium"

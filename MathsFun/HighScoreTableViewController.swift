@@ -7,18 +7,20 @@
 
 import UIKit
 
+/// This Controller is responsible for showing user scores.
 class HighScoreTableViewController: UITableViewController {
     // MARK: - Class Variables
     
+    /// shared instance of GameModel class, which is a singleton Class.
     let gameModel = GameModel.shared
+    
+    /// Array of privious game data
     var gameDataArr = [GameData]()
     
     
     // MARK: - Class View Overrides
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
+    /// This function is called whenever this controller is in the view.
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadData()
@@ -32,10 +34,12 @@ class HighScoreTableViewController: UITableViewController {
     
     // MARK: - Class Functions
     
+    /// Function used by back button generated in viewWillAppear function.
     @objc func backButtonAction() {
         self.navigationController?.popToRootViewController(animated: true)
     }
     
+    /// Function used to load the privious game data from storage.
     func loadData(){
         let numberOfGames = UserDefaults.standard.integer(forKey: Constants.NUM_GAMES + gameModel.getSelectedMode())
         for i in (0..<numberOfGames) {
@@ -50,16 +54,19 @@ class HighScoreTableViewController: UITableViewController {
     
     // MARK: - Table view data source
     
+    /// Returns the number of sections
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
+    /// Returns the total number of games for a particular mode
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let numberOfGames = UserDefaults.standard.integer(forKey: Constants.NUM_GAMES + gameModel.getSelectedMode())
         return numberOfGames
     }
     
     
+    /// Returns the call for a perticular row.
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "highScoreCell", for: indexPath) as! HighScoreTableViewCell
         let thisRowData = gameDataArr[indexPath.row]
@@ -73,6 +80,7 @@ class HighScoreTableViewController: UITableViewController {
 
 // MARK: - Structs
 
+/// Structure of data that is being saved in the game.
 struct GameData {
     var score: Int
     var dateTime: String
