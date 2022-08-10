@@ -108,14 +108,13 @@ class HardModeGameBoardViewController: UIViewController {
     
     /// This function is used to go to the score list.
     func goToScoreList(){
-        self.navigationController?.popViewController(animated: true)
         let highScoreList = storyBoard.instantiateViewController(withIdentifier: "HighScoreList") as! HighScoreTableViewController
         navigationController?.pushViewController(highScoreList, animated: true)
-        
     }
     
     /// This function is called once the game ends
     func endGame(){
+        dataModel.deleteCurrentGameState()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd"
         let dateStr = formatter.string(from: Date())

@@ -39,7 +39,6 @@ class ViewController: UIViewController {
         let isGameSaved = dataModel.isGameSaved()
         print(isGameSaved)
         if(isGameSaved) {
-            print(UserDefaults.standard.string(forKey: Constants.CURRENT_GAME_MODE)!)
             gameModel.setSelectedMode(mode: UserDefaults.standard.string(forKey: Constants.CURRENT_GAME_MODE)!)
         }
         continueButton.isHidden = !isGameSaved
